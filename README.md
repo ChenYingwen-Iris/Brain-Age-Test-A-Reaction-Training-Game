@@ -108,7 +108,7 @@ python -m pip install imageio pillow   # optional (auto‑assemble GIFs)
 2) Run the game:
 
 ```powershell
-python .\ReactionTest_Mini-Game.py
+python .\ReactionTest-Mini-Game.py
 ```
 
 If audio initialization fails, the game automatically falls back to a pure‑Python audio path and continues running.
