@@ -1,4 +1,4 @@
-Place screenshots used by the root README here.
+                                                                                                                                                                                                            Place screenshots used by the root README here.
 
 Expected filenames:
 - title.png

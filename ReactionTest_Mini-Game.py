@@ -1003,6 +1003,8 @@ class Game:
         self._cap_frames = 0
         self._cap_max_frames = 180  # ~15s at 12 FPS
         self._cap_target = ''
+        # Optional override for next capture target filename (e.g., 'miss.gif')
+        self._cap_next_override = None
         try:
             os.makedirs(self._cap_dir, exist_ok=True)
         except Exception:
@@ -1179,7 +1181,16 @@ class Game:
                 self._cap_active = True
                 self._cap_last = 0.0
                 self._cap_frames = 0
-                self._cap_target = self._cap_pick_filename()
+                # pick target filename; allow one-time override
+                if self._cap_next_override:
+                    tgt = self._cap_next_override
+                    if not os.path.isabs(tgt):
+                        tgt = os.path.join(self._cap_dir, tgt)
+                    self._cap_target = tgt
+                else:
+                    self._cap_target = self._cap_pick_filename()
+                # clear override after use
+                self._cap_next_override = None
                 # lightweight on-screen hint if available
                 self.feedback_text = "REC..."
                 self.feedback_color = (255, 200, 0)
@@ -1329,13 +1340,13 @@ class Game:
                 self.autogif_flags = {}
                 return
 
-        # PHASE: Playing -> ensure two quick correct hits (Perfect + Combo)
+        # PHASE: Playing -> ensure two quick correct hits (Perfect + Combo); then capture a MISS demo
         if self.autogif_phase == 'playing':
             if t >= 0.05 and not self._cap_active:
                 try: self._toggle_capture()
                 except Exception: pass
-            # Ensure first block is visible quickly
-            if t >= 0.08 and not self.block_visible and self.current_block is None:
+            # Ensure first two blocks are valid and show up quickly
+            if t >= 0.06 and not self.block_visible and self.current_block is None:
                 try:
                     # guarantee first two are valid blocks
                     if len(self.block_sequence) >= 2:
@@ -1348,33 +1359,71 @@ class Game:
                 except Exception:
                     pass
             # Hit first block fast (aim for Perfect <0.28s)
-            if t >= 0.18 and self.block_visible and self.current_block and not self.current_block.is_clicked:
+            if t >= 0.15 and self.block_visible and self.current_block and not self.current_block.is_clicked:
                 try:
                     keyname = getattr(self.current_block, 'correct_key', 'r')
                     keycode = pygame.key.key_code(keyname) if hasattr(pygame.key, 'key_code') else getattr(pygame, f'K_{keyname}', pygame.K_r)
                     post_key(keycode)
                 except Exception:
                     post_key(pygame.K_r)
-            # Spawn second block during interval
-            if t >= 0.45 and (not self.block_visible) and self.current_block is None and self.block_count == 1:
+            # Spawn second block during interval (earlier, so we have more time to show COMBO banner)
+            if t >= 0.28 and (not self.block_visible) and self.current_block is None and self.block_count == 1:
                 try:
                     self.next_block()
                 except Exception:
                     pass
             # Hit second block to build combo
-            if t >= 0.55 and self.block_visible and self.block_count == 2 and self.current_block and not self.current_block.is_clicked:
+            if t >= 0.36 and self.block_visible and self.block_count == 2 and self.current_block and not self.current_block.is_clicked:
                 try:
                     keyname = getattr(self.current_block, 'correct_key', 'g')
                     keycode = pygame.key.key_code(keyname) if hasattr(pygame.key, 'key_code') else getattr(pygame, f'K_{keyname}', pygame.K_g)
                     post_key(keycode)
                 except Exception:
                     post_key(pygame.K_g)
-            # Stop gameplay capture after combo text appears for a bit
-            if t >= 1.6 and self._cap_active:
-                try: self._toggle_capture()
-                except Exception: pass
-            # Force fast finish to results
-            if t >= 1.7:
+            # Detect when COMBO is actually visible and then keep recording a bit longer
+            if not self.autogif_flags.get('combo_seen', False):
+                if getattr(self, 'combo_last_streak', 0) >= 2 and (time.time() < getattr(self, 'combo_visible_until', 0.0)):
+                    self.autogif_flags['combo_seen'] = True
+                    self.autogif_flags['combo_seen_t'] = now
+            # Stop gameplay capture after COMBO has been on-screen for ~0.9s; fallback hard stop at ~2.8s
+            if self._cap_active:
+                if self.autogif_flags.get('combo_seen') and (now - self.autogif_flags.get('combo_seen_t', now)) >= 0.9:
+                    try: self._toggle_capture()
+                    except Exception: pass
+                elif t >= 2.8:
+                    try: self._toggle_capture()
+                    except Exception: pass
+
+            # After combo clip, record a short MISS demo as a separate GIF
+            if (not self._cap_active) and (not self.autogif_flags.get('miss_started', False)) and (self.current_block is None) and (not self.block_visible):
+                try:
+                    # set next capture target to miss.gif and start recording
+                    self._cap_next_override = 'miss.gif'
+                    self._toggle_capture()
+                except Exception:
+                    pass
+                # ensure next block is a valid target so missing it will show MISS!
+                try:
+                    if len(self.block_sequence) > self.block_count:
+                        self.block_sequence[self.block_count] = False
+                    self.next_block()
+                except Exception:
+                    pass
+                self.autogif_flags['miss_started'] = True
+
+            # Stop miss.gif once MISS! label has been visible for a moment
+            if self.autogif_flags.get('miss_started', False) and (not self.autogif_flags.get('miss_done', False)):
+                try:
+                    if getattr(self, 'reaction_time_text', None) == 'MISS!' and (time.time() - getattr(self, 'reaction_time_display_time', 0.0)) >= 0.6:
+                        if self._cap_active:
+                            try: self._toggle_capture()
+                            except Exception: pass
+                        self.autogif_flags['miss_done'] = True
+                except Exception:
+                    pass
+            # Force fast finish to results slightly later to ensure COMBO was captured
+            # Wait for miss demo to complete or a hard timeout
+            if (t >= 3.0 and self.autogif_flags.get('miss_done', False)) or t >= 5.0:
                 self.current_block = None
                 self.block_visible = False
                 self.block_count = TOTAL_BLOCKS
@@ -2523,6 +2572,13 @@ class Game:
                         except Exception:
                             pass
                         continue
+                    # Any other key goes to rankings (as the hint says)
+                    try:
+                        if 'UI_NAV_SOUND' in globals() and UI_NAV_SOUND:
+                            UI_NAV_SOUND.play()
+                    except Exception:
+                        pass
+                    self.game_state = "rankings"
                 if event.type == MOUSEBUTTONDOWN:
                     if rec_rect and rec_rect.collidepoint(event.pos):
                         try:
