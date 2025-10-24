@@ -54,8 +54,7 @@ Put GIFs under `assets/gifs/` with these names (the README will reference them a
   ![Gameplay - Combo + Perfect](assets/gifs/gameplay_combo_perfect.gif)
 - Results + Rankings
   ![Results + Rankings](assets/gifs/results_rankings.gif)
-- Settings
-  ![Settings GIF](assets/gifs/settings.gif)
+ 
 
 Recording tips (Windows):
 - ScreenToGif (recommended): region record → save as GIF; crop/trim/scale inside the editor.
