@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Pygame capture temp frames
+assets/gifs/_tmp_*/
+assets/gifs/*.png
+
+# Bytecode caches
+*.pytest_cache/
+.mypy_cache/
