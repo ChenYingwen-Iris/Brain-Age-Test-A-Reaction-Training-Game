@@ -52,6 +52,8 @@ Put GIFs under `assets/gifs/` with these names (the README will reference them a
   ![Instructions + Countdown](assets/gifs/instructions_countdown.gif)
 - Gameplay (Combo + Perfect)
   ![Gameplay - Combo + Perfect](assets/gifs/gameplay_combo_perfect.gif)
+ - Miss example
+  ![Miss](assets/gifs/miss.gif)
  - Results + Rankings
   ![Results + Rankings](assets/gifs/results_Rankings.gif)
  - Settings
@@ -69,13 +71,14 @@ Re‑record the README GIFs (will overwrite files with the same names):
 - title_intro.gif: on the title screen, press REC to start, show 2–4 seconds, then press REC to stop.
 - instructions_countdown.gif: on “INSTRUCTIONS”, press any key to trigger 3‑2‑1‑GO, press REC during the countdown, and stop ~1s after “GO!”.
 - gameplay_combo_perfect.gif: once gameplay begins, hit two valid blocks in a row to trigger COMBO and try to get a Perfect; record an appropriate slice.
+- miss.gif: let a valid block appear and intentionally do not hit it; stop after the "MISS!" label shows briefly.
 - results_Rankings.gif: after results are shown, press any key to enter rankings; record the transition and stop in the rankings page.
 - settings.gif: in rankings, press S to open settings; record a short volume/ toggle demonstration and stop.
 
 Tips:
 - Recording will overwrite files under `assets/gifs/` with the same names.
 - If you see leftover temp folders like `assets/gifs/_tmp_<timestamp>/`, you can delete the ones you don’t need.
-- Bonus: press F9 to auto‑record all the showcase GIFs end‑to‑end (optional).
+- Bonus: press F9 to auto‑record all the showcase GIFs end‑to‑end (optional). The sequence now also includes a short `miss.gif` clip after the combo clip.
 
 ## How to play
 - Goal: under time pressure, quickly and accurately decide whether the text on a block matches the block’s color. Aim for higher scores and faster average reaction times.
