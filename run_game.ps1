@@ -1,4 +1,4 @@
-param(
+                                                                                                                                                                                                                                                                                                                            param(
     [string]$Python = ""
 )
 
@@ -6,8 +6,8 @@ param(
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
-# Target game file (quoted for parentheses in name)
-$target = Join-Path $scriptDir "ReactionTest-Mini-Game(1).py"
+# Target game file (renamed to drop parentheses)
+$target = Join-Path $scriptDir "ReactionTest-Mini-Game.py"
 
 function Try-Run([string]$exe) {
     try {

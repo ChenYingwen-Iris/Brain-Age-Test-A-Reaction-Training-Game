@@ -108,7 +108,7 @@ python -m pip install imageio pillow   # optional (auto‑assemble GIFs)
 2) Run the game:
 
 ```powershell
-python .\ReactionTest_Mini-Game(1).py
+python .\ReactionTest_Mini-Game.py
 ```
 
 If audio initialization fails, the game automatically falls back to a pure‑Python audio path and continues running.
@@ -147,5 +147,3 @@ If audio initialization fails, the game automatically falls back to a pure‑Pyt
 - Windows: use `Win + Shift + S` (Snipping Tool) or `PrtSc`/`Alt + PrtSc` then paste to save.
 - In‑code capture (optional): call `pygame.image.save(SCREEN, "path.png")` on a suitable frame.
 
----
-If you’d like me to add a hotkey to auto‑export a full set of screenshots, say the preferred size and layout and I’ll wire it up.
