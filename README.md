@@ -53,7 +53,7 @@ Put GIFs under `assets/gifs/` with these names (the README will reference them a
 - Gameplay (Combo + Perfect)
   ![Gameplay - Combo + Perfect](assets/gifs/gameplay_combo_perfect.gif)
  - Results + Rankings
-  ![Results + Rankings](assets/gifs/results_rankings.gif)
+  ![Results + Rankings](assets/gifs/results_Rankings.gif)
  - Settings
   ![Settings GIF](assets/gifs/settings.gif)
  
@@ -69,7 +69,7 @@ Re‑record the README GIFs (will overwrite files with the same names):
 - title_intro.gif: on the title screen, press REC to start, show 2–4 seconds, then press REC to stop.
 - instructions_countdown.gif: on “INSTRUCTIONS”, press any key to trigger 3‑2‑1‑GO, press REC during the countdown, and stop ~1s after “GO!”.
 - gameplay_combo_perfect.gif: once gameplay begins, hit two valid blocks in a row to trigger COMBO and try to get a Perfect; record an appropriate slice.
-- results_rankings.gif: after results are shown, press any key to enter rankings; record the transition and stop in the rankings page.
+- results_Rankings.gif: after results are shown, press any key to enter rankings; record the transition and stop in the rankings page.
 - settings.gif: in rankings, press S to open settings; record a short volume/ toggle demonstration and stop.
 
 Tips:
