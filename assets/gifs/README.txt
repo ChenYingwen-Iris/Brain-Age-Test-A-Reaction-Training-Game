@@ -1,4 +1,4 @@
-Place animated GIFs here for the README.
+                                                        Place animated GIFs here for the README.
 
 Suggested filenames:
 - title_intro.gif             # Title screen subtle motion / name input
