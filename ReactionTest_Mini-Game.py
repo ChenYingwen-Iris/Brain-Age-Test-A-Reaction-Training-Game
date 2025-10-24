@@ -2532,6 +2532,13 @@ class Game:
                         except Exception:
                             pass
                         continue
+                    # Any other key goes to rankings (as the hint says)
+                    try:
+                        if 'UI_NAV_SOUND' in globals() and UI_NAV_SOUND:
+                            UI_NAV_SOUND.play()
+                    except Exception:
+                        pass
+                    self.game_state = "rankings"
                 if event.type == MOUSEBUTTONDOWN:
                     if rec_rect and rec_rect.collidepoint(event.pos):
                         try:
